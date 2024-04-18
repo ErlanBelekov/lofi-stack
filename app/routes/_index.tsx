@@ -1,4 +1,5 @@
-import type { MetaFunction } from "@remix-run/node";
+import { json, type MetaFunction } from "@remix-run/node";
+import { cities, countries, db } from "~/drizzle";
 
 export const meta: MetaFunction = () => {
   return [
@@ -6,6 +7,20 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+export async function loader() {
+  const currentCities = await db.select().from(cities);
+
+  console.log(currentCities);
+
+  const currentCountries = await db.select().from(countries);
+
+  console.log(currentCountries);
+
+  return json({
+    message: "OK!",
+  });
+}
 
 export default function Index() {
   return (
