@@ -1,3 +1,33 @@
+## still WIP, not ready for production use!
+
+# Remix Phonk Stack
+
+![The Remix Blues Stack](https://repository-images.githubusercontent.com/461012689/37d5bd8b-fa9c-4ab0-893c-f0a199d5012d)
+
+Learn more about [Remix Stacks](https://remix.run/stacks).
+
+```
+npx create-remix@latest --template remix-run/blues-stack
+```
+
+## What's in the stack
+
+- `Google Cloud Run(Serverless)` deployment
+- `Google Cloud MySQL` database cluster
+- `Google Cloud Artifact Registry` for storing `Docker` images
+- Production-ready `Dockerfile` with minimal footprint
+- Type-safe access to `process.env` using `Zod`
+- Github Actions CI/CD: automatic deploy to stage `stage` and `main` environments
+- Simple & Extendable Authentication using `remix-auth`
+- Database ORM with `Drizzle ORM`
+- Styling with `Tailwind`
+- End-to-End testing with `PlayWright`
+- Unit testing with `Vitest`
+- Package management with `pnpm`
+- Code formatting with `Prettier`
+- Linting with `ESlint`
+- Static Types with `TypeScript`
+
 # Welcome to Remix + Vite!
 
 📖 See the [Remix docs](https://remix.run/docs) and the [Remix Vite docs](https://remix.run/docs/en/main/future/vite) for details on supported features.
