@@ -1,1 +1,1 @@
-export * from "./env.server";
+export * from "./routes";
