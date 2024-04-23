@@ -25,21 +25,25 @@ const LoginFormSchema = z.object({
 
 authenticator.use(
   new FormStrategy(async ({ form }) => {
-    const parsedData = LoginFormSchema.parse({
+    const dataParseResult = LoginFormSchema.safeParse({
       email: form.get("email"),
       password: form.get("password"),
     });
 
+    if (!dataParseResult.success) {
+      throw new Error(dataParseResult.error.issues[0].message);
+    }
+
     const userInDb = await db
       .select()
       .from(users)
-      .where(eq(users.email, parsedData.email));
+      .where(eq(users.email, dataParseResult.data.email));
 
     if (!userInDb.length) {
       throw new Error("User doesn't exist.");
     }
 
-    if (userInDb[0].password !== parsedData.password) {
+    if (userInDb[0].password !== dataParseResult.data.password) {
       throw new Error("User doesn't exist.");
     }
 
@@ -64,32 +68,38 @@ const SignupFormSchema = z.object({
 
 authenticator.use(
   new FormStrategy(async ({ form }) => {
-    const parsedData = SignupFormSchema.parse({
+    const dataParseResult = SignupFormSchema.safeParse({
       email: form.get("email"),
       password: form.get("password"),
       confirmPassword: form.get("confirmPassword"),
     });
 
-    if (parsedData.password !== parsedData.confirmPassword) {
+    if (!dataParseResult.success) {
+      throw new Error(dataParseResult.error.issues[0].message);
+    }
+
+    if (
+      dataParseResult.data.password !== dataParseResult.data.confirmPassword
+    ) {
       throw new Error("Passwords don't match.");
     }
 
     const userInDb = await db
       .select()
       .from(users)
-      .where(eq(users.email, parsedData.email));
+      .where(eq(users.email, dataParseResult.data.email));
 
     if (userInDb.length) {
       throw new Error("Email is taken.");
     }
 
     await db.insert(users).values({
-      email: parsedData.email,
-      password: parsedData.password,
+      email: dataParseResult.data.email,
+      password: dataParseResult.data.password,
     });
 
     const user = await db.query.users.findFirst({
-      where: eq(users.email, parsedData.email),
+      where: eq(users.email, dataParseResult.data.email),
     });
 
     // DB inconcistency issue
