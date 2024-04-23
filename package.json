@@ -10,16 +10,16 @@
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
     "migrations:migrate": "pnpm dlx tsx@3.13.0 ./app/drizzle/migrate.server.ts",
-    "migrations:generate": "pnpm drizzle-kit generate:mysql"
+    "migrations:generate": "pnpm drizzle-kit generate:sqlite"
   },
   "dependencies": {
+    "@libsql/client": "^0.6.0",
     "@remix-run/node": "^2.8.1",
     "@remix-run/react": "^2.8.1",
     "@remix-run/serve": "^2.8.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.8",
     "isbot": "^4.1.0",
-    "mysql2": "^3.9.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "remix-auth": "^3.6.0",
