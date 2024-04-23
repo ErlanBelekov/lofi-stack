@@ -1,15 +1,15 @@
 import "dotenv/config";
-import mysql from "mysql2/promise";
-import { drizzle } from "drizzle-orm/mysql2";
-import { migrate } from "drizzle-orm/mysql2/migrator";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
+import { migrate } from "drizzle-orm/libsql/migrator";
 import { z } from "zod";
+
 import * as schema from "./schema.server";
 
 export const MigrateScriptSchema = z.object({
-  DATABASE_USERNAME: z.string(),
-  DATABASE_PASSWORD: z.string(),
-  DATABASE_NAME: z.string(),
-  INSTANCE_UNIX_SOCKET: z.string().optional(),
+  DB_URL: z.string(),
+  DB_AUTH_TOKEN: z.string(),
+
   APP_ENV: z.union([
     z.literal("PRODUCTION"),
     z.literal("STAGE"),
@@ -22,20 +22,12 @@ async function main() {
 
   console.log("Migration data: \n", data);
 
-  const connection = await mysql.createConnection({
-    user: data.DATABASE_USERNAME, // e.g. 'my-db-user'
-    password: data.DATABASE_PASSWORD, // e.g. 'my-db-password'
-    database: data.DATABASE_NAME, // e.g. 'my-database'
-    ...(data.APP_ENV === "DEVELOPMENT"
-      ? {
-          host: "127.0.0.1",
-        }
-      : {
-          socketPath: data.INSTANCE_UNIX_SOCKET, // e.g. '/cloudsql/project:region:instance'
-        }),
+  const client = createClient({
+    url: data.DB_URL,
+    authToken: data.DB_AUTH_TOKEN,
   });
 
-  const db = drizzle(connection, { schema, mode: "default" });
+  const db = drizzle(client, { schema });
 
   await migrate(db, { migrationsFolder: "app/drizzle/migrations" });
 
@@ -47,12 +39,7 @@ async function main() {
       id: 1,
       name: "USA",
     })
-    .onDuplicateKeyUpdate({
-      set: {
-        id: 1,
-        name: "USA",
-      },
-    });
+    .onConflictDoNothing();
 
   await db
     .insert(schema.countries)
@@ -60,12 +47,7 @@ async function main() {
       id: 2,
       name: "Kyrgyzstan",
     })
-    .onDuplicateKeyUpdate({
-      set: {
-        id: 2,
-        name: "Kyrgyzstan",
-      },
-    });
+    .onConflictDoNothing();
 
   await db
     .insert(schema.users)
@@ -74,13 +56,7 @@ async function main() {
       email: "erlan@remix.run",
       password: "!StrongPassword01",
     })
-    .onDuplicateKeyUpdate({
-      set: {
-        id: 1,
-        email: "erlan@remix.run",
-        password: "!StrongPassword01",
-      },
-    });
+    .onConflictDoNothing();
 }
 
 main();

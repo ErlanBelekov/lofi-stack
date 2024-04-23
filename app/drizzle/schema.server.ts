@@ -1,32 +1,31 @@
 import {
-  int,
-  mysqlEnum,
-  mysqlTable,
+  integer,
+  sqliteTable,
+  text,
   uniqueIndex,
-  varchar,
-} from "drizzle-orm/mysql-core";
+} from "drizzle-orm/sqlite-core";
 
 // declaring enum in database
-export const countries = mysqlTable(
+export const countries = sqliteTable(
   "countries",
   {
-    id: int("id").primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
+    id: integer("id").primaryKey(),
+    name: text("name"),
   },
   (countries) => ({
     nameIndex: uniqueIndex("name_idx").on(countries.name),
   })
 );
 
-export const cities = mysqlTable("cities", {
-  id: int("id").primaryKey().autoincrement(),
-  name: varchar("name", { length: 256 }),
-  countryId: int("country_id").references(() => countries.id),
-  popularity: mysqlEnum("popularity", ["unknown", "known", "popular"]),
+export const cities = sqliteTable("cities", {
+  id: integer("id").primaryKey(),
+  name: text("name"),
+  countryId: integer("country_id").references(() => countries.id),
+  popularity: text("popularity", { enum: ["unknown", "known", "popular"] }),
 });
 
-export const users = mysqlTable("users", {
-  id: int("id").primaryKey().autoincrement(),
-  email: varchar("email", { length: 256 }).unique().notNull(),
-  password: varchar("password", { length: 256 }).notNull(),
+export const users = sqliteTable("users", {
+  id: integer("id").primaryKey(),
+  email: text("email").unique().notNull(),
+  password: text("password").notNull(),
 });
