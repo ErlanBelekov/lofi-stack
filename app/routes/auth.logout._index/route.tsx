@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { Routes } from "~/lib";
 import { authenticator } from "~/lib/auth.server";
 

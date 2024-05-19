@@ -1,0 +1,11 @@
+# Cloudflare pages requires a top level name attribute
+name = "lofi-stack"
+
+# Cloudflare Pages will ignore wrangler.toml without this line
+pages_build_output_dir = "./build/client"
+
+# Fixes "no such module 'node:events'"
+compatibility_flags = [ "nodejs_compat" ]
+
+# Fixes "compatibility_flags cannot be specified without a compatibility_date"
+compatibility_date = "2024-04-18"

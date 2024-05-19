@@ -12,13 +12,10 @@ npx create-remix@latest --template ErlanBelekov/lofi-stack
 
 ## What's in the stack
 
-- `Google Cloud Run(Serverless)` deployment
+- `Cloudflare Pages` deployment
 - `SQLite` database powered by `Turso`
 - Database ORM with `Drizzle ORM`
-- `Google Cloud Artifact Registry` for storing `Docker` images
-- Production-ready `Dockerfile` with minimal footprint
 - Type-safe access to `process.env` using `Zod`
-- Github Actions CI/CD: automatic deploy to stage `stage` and `prodoction` environments
 - Simple & Extendable Authentication using `remix-auth`
 - Styling with `Tailwind`
 - End-to-End testing with `PlayWright`

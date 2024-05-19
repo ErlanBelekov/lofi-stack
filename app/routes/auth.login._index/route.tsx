@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, json } from "@remix-run/cloudflare";
 import { Form, Link, useActionData } from "@remix-run/react";
 import { AuthorizationError } from "remix-auth";
 import { Routes } from "~/lib";

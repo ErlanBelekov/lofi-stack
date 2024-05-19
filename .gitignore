@@ -4,5 +4,7 @@ node_modules
 /build
 .env
 
+.wrangler
+
 # don't copy drizzle migrations, since they should not be on end user devices
 app/drizzle/migrations/

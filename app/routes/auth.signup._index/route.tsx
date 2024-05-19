@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs } from "@remix-run/cloudflare";
 import { Form, Link, useActionData } from "@remix-run/react";
 import { AuthorizationError } from "remix-auth";
 import { Routes } from "~/lib";
@@ -16,10 +16,10 @@ export async function action({ request }: ActionFunctionArgs) {
     if (error instanceof Response) return error;
     if (error instanceof AuthorizationError) {
       // here the error is related to the authentication process
-      return json({ message: error.message });
+      return { message: error.message };
     }
     // here the error is a generic error that another reason may throw
-    return json({ message: "Unknown error." });
+    return { message: "Unknown error." };
   }
 }
 
@@ -55,8 +55,12 @@ export default function LoginPage() {
         >
           Signup
         </button>
-        {actionData && "message" in actionData ? (
-          <p className="text-red-500">Error: {actionData.message}</p>
+        {actionData &&
+        typeof actionData === "object" &&
+        "message" in actionData ? (
+          <p className="text-red-500">
+            Error: {actionData.message as unknown as string}
+          </p>
         ) : (
           <></>
         )}

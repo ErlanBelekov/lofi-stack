@@ -1,4 +1,8 @@
-import { LoaderFunctionArgs, json, type MetaFunction } from "@remix-run/node";
+import {
+  LoaderFunctionArgs,
+  json,
+  type MetaFunction,
+} from "@remix-run/cloudflare";
 import { Link, useLoaderData } from "@remix-run/react";
 import { cities, countries, db } from "~/drizzle";
 import { Routes } from "~/lib";
